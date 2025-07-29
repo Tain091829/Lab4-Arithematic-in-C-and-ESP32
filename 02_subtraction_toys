@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include "esp_log.h"
+
+void app_main(void)
+{
+    const char *TAG = "TOY_PROJECT";
+
+    // 🧸 จำนวนของเล่น
+    int toys_at_home = 8;      // ของเล่นที่น้องมีอยู่
+    int toys_give_away = 3;    // ของเล่นที่แจกให้เพื่อน
+    int toys_remaining;        // ของเล่นที่เหลือ
+
+    toys_remaining = toys_at_home - toys_give_away;
+
+    // 🖥 แสดงผลลัพธ์
+    ESP_LOGI(TAG, "=== ของเล่นของน้อง ===");
+    ESP_LOGI(TAG, "น้องมีของเล่นอยู่: %d ชิ้น", toys_at_home);
+    ESP_LOGI(TAG, "แจกให้เพื่อน: %d ชิ้น", toys_give_away);
+    ESP_LOGI(TAG, "ของเล่นที่เหลือ: %d - %d = %d ชิ้น", 
+             toys_at_home, toys_give_away, toys_remaining);
+
+    // ✅ แบบฝึกหัดที่ 2: ตรวจสอบว่าพอแจกไหม
+    if (toys_at_home >= toys_give_away) {
+        ESP_LOGI(TAG, "✅ ของเล่นพอแจก");
+    } else {
+        ESP_LOGI(TAG, "❌ ของเล่นไม่พอ! ขาดไป %d ชิ้น", 
+                 toys_give_away - toys_at_home);
+    }
+
+    // 🧩 แบบฝึกหัดที่ 3: เพิ่มตุ๊กตาและหุ่นยนต์
+    int dolls = 5;    // ตุ๊กตา
+    int robots = 2;   // หุ่นยนต์
+    int total_toys = toys_at_home + dolls + robots;
+
+    ESP_LOGI(TAG, "🪆 ตุ๊กตา: %d ตัว", dolls);
+    ESP_LOGI(TAG, "🤖 หุ่นยนต์: %d ตัว", robots);
+    ESP_LOGI(TAG, "🎯 ของเล่นทั้งหมด: %d ชิ้น", total_toys);
+
+    // 🎓 แบบฝึกหัดที่ 4: แจกให้ 10 คน คนละ 2 ชิ้น
+    int friends = 10;
+    int toys_needed = friends * 2;
+
+    ESP_LOGI(TAG, "👫 ต้องการของเล่นทั้งหมด: %d ชิ้น (สำหรับ %d คน คนละ 2 ชิ้น)", 
+             toys_needed, friends);
+
+    if (total_toys >= toys_needed) {
+        ESP_LOGI(TAG, "✅ ของเล่นเพียงพอ");
+    } else {
+        ESP_LOGI(TAG, "❌ ของเล่นไม่พอ ขาดอีก %d ชิ้น", 
+                 toys_needed - total_toys);
+    }
+}
