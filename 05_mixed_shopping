@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+typedef struct {
+    char name[20];
+    int quantity;
+    int price_per_unit;
+} Item;
+
+void print_item(Item item) {
+    int total = item.quantity * item.price_per_unit;
+    printf("%s: %d × %d = %d บาท\n", item.name, item.quantity, item.price_per_unit, total);
+}
+
+int main() {
+    printf("=== ใบเสร็จซื้อของที่ตลาด ===\n");
+
+    Item apple = {"แอปเปิ้ล", 6, 15};
+    Item banana = {"กล้วย", 12, 8};
+    Item orange = {"ส้ม", 8, 12};
+
+    int total_apple = apple.quantity * apple.price_per_unit;
+    int total_banana = banana.quantity * banana.price_per_unit;
+    int total_orange = orange.quantity * orange.price_per_unit;
+
+    int subtotal = total_apple + total_banana + total_orange;
+    int discount = 20;
+    int net_total = subtotal - discount;
+    float per_person = net_total / 3.0;
+
+    // แสดงผล
+    print_item(apple);
+    print_item(banana);
+    print_item(orange);
+    printf("----------------------\n");
+    printf("รวม: %d บาท\n", subtotal);
+    printf("ส่วนลด: -%d บาท\n", discount);
+    printf("ยอดสุทธิ: %d บาท\n", net_total);
+    printf("แบ่งจ่าย 3 คน: %.2f บาท/คน\n", per_person);
+
+    return 0;
+}
