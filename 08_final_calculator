@@ -1,0 +1,179 @@
+/*=========================*/
+/*   Final Calculator ESP32   */
+/*=========================*/
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include <stdbool.h>
+
+#define MAX_HISTORY 100
+#define HISTORY_FILE "history.txt"
+
+typedef enum { BASIC, ADVANCED, SHOP, HISTORY, EXIT } Mode;
+
+typedef struct {
+    char operation[100];
+    double result;
+} History;
+
+History history[MAX_HISTORY];
+int historyCount = 0;
+
+/* Utility */
+void save_history(const char *operation, double result) {
+    if (historyCount >= MAX_HISTORY) return;
+    strcpy(history[historyCount].operation, operation);
+    history[historyCount].result = result;
+    historyCount++;
+    FILE *file = fopen(HISTORY_FILE, "a");
+    if (file) {
+        fprintf(file, "%s = %.2f\n", operation, result);
+        fclose(file);
+    }
+}
+
+void load_history() {
+    FILE *file = fopen(HISTORY_FILE, "r");
+    if (!file) return;
+    char buffer[150];
+    while (fgets(buffer, sizeof(buffer), file)) {
+        if (historyCount >= MAX_HISTORY) break;
+        sscanf(buffer, "%[^=]=%lf", history[historyCount].operation, &history[historyCount].result);
+        historyCount++;
+    }
+    fclose(file);
+}
+
+void view_history() {
+    printf("\n=== ประวัติการคำนวณ ===\n");
+    for (int i = 0; i < historyCount; i++) {
+        printf("%d. %s = %.2f\n", i + 1, history[i].operation, history[i].result);
+    }
+}
+
+void clear_history() {
+    historyCount = 0;
+    remove(HISTORY_FILE);
+    printf("\n🧹 ล้างประวัติเรียบร้อยแล้ว\n");
+}
+
+/* Basic Calculator */
+void basic_mode() {
+    int choice;
+    double a, b, result;
+    char operation[50];
+    printf("\n[1] บวก [2] ลบ [3] คูณ [4] หาร\nเลือกการคำนวณ: ");
+    scanf("%d", &choice);
+    printf("ใส่ตัวเลข 2 จำนวน: ");
+    scanf("%lf %lf", &a, &b);
+
+    switch (choice) {
+        case 1: result = a + b; sprintf(operation, "%.2f + %.2f", a, b); break;
+        case 2: result = a - b; sprintf(operation, "%.2f - %.2f", a, b); break;
+        case 3: result = a * b; sprintf(operation, "%.2f * %.2f", a, b); break;
+        case 4: result = b != 0 ? a / b : 0; sprintf(operation, "%.2f / %.2f", a, b); break;
+        default: printf("\n❌ ตัวเลือกไม่ถูกต้อง\n"); return;
+    }
+    printf("ผลลัพธ์: %.2f\n", result);
+    save_history(operation, result);
+}
+
+/* Advanced Math */
+void advanced_mode() {
+    int choice;
+    printf("\n[1] ยกกำลัง [2] รากที่สอง [3] แฟกทอเรียล\nเลือก: ");
+    scanf("%d", &choice);
+    double x, result = 1;
+    int n;
+    char operation[50];
+
+    switch (choice) {
+        case 1:
+            printf("ฐานและเลขชี้กำลัง: ");
+            scanf("%lf %lf", &x, &result);
+            result = pow(x, result);
+            sprintf(operation, "pow(%.2f, %.2f)", x, result);
+            break;
+        case 2:
+            printf("ตัวเลข: ");
+            scanf("%lf", &x);
+            result = sqrt(x);
+            sprintf(operation, "sqrt(%.2f)", x);
+            break;
+        case 3:
+            printf("จำนวนเต็ม: ");
+            scanf("%d", &n);
+            for (int i = 1; i <= n; i++) result *= i;
+            sprintf(operation, "%d!", n);
+            break;
+        default:
+            printf("\n❌ ไม่ถูกต้อง\n"); return;
+    }
+    printf("ผลลัพธ์: %.2f\n", result);
+    save_history(operation, result);
+}
+
+/* Shop POS */
+void shop_mode() {
+    double total = 0, price;
+    int qty, count;
+    char operation[100] = "สินค้า:";
+    printf("จำนวนรายการสินค้า: ");
+    scanf("%d", &count);
+    for (int i = 0; i < count; i++) {
+        printf("ราคาสินค้า #%d: ", i + 1);
+        scanf("%lf", &price);
+        printf("จำนวน: ");
+        scanf("%d", &qty);
+        total += price * qty;
+    }
+    double discount = 0, tax = 0;
+    printf("ส่วนลด (บาท): ");
+    scanf("%lf", &discount);
+    printf("ภาษี (%%): ");
+    scanf("%lf", &tax);
+    double final = (total - discount) * (1 + tax / 100);
+    printf("รวมสุทธิ: %.2f\n", final);
+    sprintf(operation + strlen(operation), " รวม %.2f บาท", final);
+    save_history(operation, final);
+}
+
+/* Main Menu */
+void main_menu() {
+    load_history();
+    int running = 1;
+    while (running) {
+        printf("\n╔════════════════════════════╗\n");
+        printf("║   🧮 เครื่องคิดเลขครบครัน     ║\n");
+        printf("╠════════════════════════════╣\n");
+        printf("║ [1] โหมดพื้นฐาน              ║\n");
+        printf("║ [2] โหมดขั้นสูง              ║\n");
+        printf("║ [3] โหมดร้านค้า              ║\n");
+        printf("║ [4] ประวัติ & สถิติ           ║\n");
+        printf("║ [0] ออก                      ║\n");
+        printf("╚════════════════════════════╝\n");
+        printf("เลือกเมนู: ");
+        int select;
+        scanf("%d", &select);
+        switch (select) {
+            case 1: basic_mode(); break;
+            case 2: advanced_mode(); break;
+            case 3: shop_mode(); break;
+            case 4:
+                view_history();
+                printf("[1] ล้างประวัติ [0] กลับ: ");
+                int h;
+                scanf("%d", &h);
+                if (h == 1) clear_history();
+                break;
+            case 0: running = 0; break;
+            default: printf("❌ ไม่พบเมนู\n"); break;
+        }
+    }
+}
+
+int main() {
+    main_menu();
+    return 0;
+}
