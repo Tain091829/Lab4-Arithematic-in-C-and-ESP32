@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <math.h>
+
+#define PI 3.14159265359
+
+// ฟังก์ชันคำนวณสนามฟุตบอล
+float calc_rectangle_area(float length, float width) {
+    return length * width;
+}
+
+float calc_rectangle_perimeter(float length, float width) {
+    return 2 * (length + width);
+}
+
+// ฟังก์ชันคำนวณสระน้ำกลม
+float calc_circle_area(float radius) {
+    return PI * radius * radius;
+}
+
+float calc_cylinder_volume(float radius, float height) {
+    return PI * radius * radius * height;
+}
+
+// ฟังก์ชันคำนวณกล่องของขวัญ
+float calc_box_volume(float length, float width, float height) {
+    return length * width * height;
+}
+
+float calc_box_surface_area(float length, float width, float height) {
+    return 2 * (length * width + width * height + length * height);
+}
+
+int main() {
+    // สนามฟุตบอล
+    float field_length = 100.0;
+    float field_width = 60.0;
+    float field_area = calc_rectangle_area(field_length, field_width);
+    float field_perimeter = calc_rectangle_perimeter(field_length, field_width);
+
+    // สระน้ำกลม
+    float pool_radius = 5.0;
+    float pool_depth = 2.0;
+    float pool_surface = calc_circle_area(pool_radius);
+    float pool_volume = calc_cylinder_volume(pool_radius, pool_depth);
+
+    // กล่องของขวัญ
+    float box_length = 20.0 / 100.0; // แปลงเป็นเมตร
+    float box_width = 15.0 / 100.0;
+    float box_height = 10.0 / 100.0;
+    float box_volume = calc_box_volume(box_length, box_width, box_height);
+    float box_surface = calc_box_surface_area(box_length, box_width, box_height);
+
+    // แสดงผลลัพธ์
+    printf("=== สนามฟุตบอล ===\n");
+    printf("พื้นที่: %.2f × %.2f = %.2f ตร.ม.\n", field_length, field_width, field_area);
+    printf("ปริเมตร: 2×(%.0f+%.0f) = %.2f ม.\n", field_length, field_width, field_perimeter);
+
+    printf("\n=== สระน้ำกลม ===\n");
+    printf("พื้นที่ผิวน้ำ: π × %.0f² = %.2f ตร.ม.\n", pool_radius, pool_surface);
+    printf("ปริมาตรน้ำ: π × %.0f² × %.0f = %.2f ลบ.ม.\n", pool_radius, pool_depth, pool_volume);
+
+    printf("\n=== กล่องของขวัญ ===\n");
+    printf("ปริมาตร: %.2f ลบ.ม.\n", box_volume);
+    printf("พื้นที่ผิว: %.2f ตร.ม.\n", box_surface);
+
+    return 0;
+}
