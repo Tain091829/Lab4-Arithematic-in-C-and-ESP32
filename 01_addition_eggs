@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include "esp_log.h"
+
+void app_main(void)
+{
+    const char *TAG = "EGG_PROJECT";
+
+    // 🥚 จำนวนไข่ไก่
+    int eggs_already_have = 4;    // ไข่ไก่ที่แม่มีอยู่แล้ว
+    int eggs_new_today = 2;       // ไข่ไก่ที่ไก่ออกวันนี้
+    int total_eggs;               // ไข่ไก่ทั้งหมด
+
+    total_eggs = eggs_already_have + eggs_new_today;
+
+    // แสดงผลลัพธ์
+    ESP_LOGI(TAG, "=== ไข่ไก่ของแม่ ===");
+    ESP_LOGI(TAG, "แม่มีไข่ไก่อยู่แล้ว: %d ฟอง", eggs_already_have);
+    ESP_LOGI(TAG, "เมื่อเช้าไก่ออกไข่เพิ่ม: %d ฟอง", eggs_new_today);
+    ESP_LOGI(TAG, "ไข่ไก่ทั้งหมด: %d + %d = %d ฟอง", 
+             eggs_already_have, eggs_new_today, total_eggs);
+
+    // 🦆 เพิ่มไข่เป็ด (แบบฝึกหัดที่ 2)
+    int duck_eggs = 3;            // ไข่เป็ดที่แม่มี
+    int total_all_eggs;          // ไข่ทั้งหมด (ไก่+เป็ด)
+    total_all_eggs = total_eggs + duck_eggs;
+
+    ESP_LOGI(TAG, "🦆 และแม่มีไข่เป็ด: %d ฟอง", duck_eggs);
+    ESP_LOGI(TAG, "🥚 ไข่ทั้งหมด (ไก่+เป็ด): %d ฟอง", total_all_eggs);
+}
