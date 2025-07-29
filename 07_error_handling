@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <limits.h>
+
+typedef enum {
+    ERROR_NONE,
+    ERROR_DIV_BY_ZERO,
+    ERROR_INVALID_INPUT,
+    ERROR_OUT_OF_RANGE,
+    ERROR_NEGATIVE_VALUE
+} ErrorCode;
+
+// ✅ ตรวจสอบการหาร
+ErrorCode check_division(int total, int people, int* result) {
+    if (people == 0)
+        return ERROR_DIV_BY_ZERO;
+    *result = total / people;
+    return ERROR_NONE;
+}
+
+// ✅ ตรวจสอบราคาสินค้า (ต้องเป็นตัวเลข)
+ErrorCode check_price(const char* price_str, int* price) {
+    for (int i = 0; i < strlen(price_str); i++) {
+        if (price_str[i] < '0' || price_str[i] > '9') {
+            return ERROR_INVALID_INPUT;
+        }
+    }
+    *price = atoi(price_str);
+    return ERROR_NONE;
+}
+
+// ✅ ตรวจสอบยอดเงิน
+ErrorCode check_money(long long money, double interest) {
+    if (money < 0 || money > 999999999999)
+        return ERROR_OUT_OF_RANGE;
+    if (interest < 0)
+        return ERROR_NEGATIVE_VALUE;
+    return ERROR_NONE;
+}
+
+// ✅ แสดงข้อความเตือน
+void print_error(ErrorCode code) {
+    switch(code) {
+        case ERROR_DIV_BY_ZERO:
+            printf("❌ ข้อผิดพลาด: ไม่สามารถหารด้วยศูนย์ได้\n💡 แนะนำ: ตรวจสอบจำนวนลูกค้าก่อนแบ่งพิซซ่า\n");
+            break;
+        case ERROR_INVALID_INPUT:
+            printf("❌ ข้อผิดพลาด: ข้อมูลไม่ถูกต้อง (ต้องเป็นตัวเลข)\n💡 แนะนำ: ตรวจสอบการพิมพ์ราคาสินค้า\n");
+            break;
+        case ERROR_OUT_OF_RANGE:
+            printf("❌ ข้อผิดพลาด: ยอดเงินเกินขอบเขตที่ระบบรองรับ\n💡 แนะนำ: ปรับยอดให้ไม่เกิน 999,999,999,999 บาท\n");
+            break;
+        case ERROR_NEGATIVE_VALUE:
+            printf("❌ ข้อผิดพลาด: อัตราดอกเบี้ยไม่ควรติดลบ\n💡 แนะนำ: ตรวจสอบข้อมูลธนาคารอีกครั้ง\n");
+            break;
+        default:
+            break;
+    }
+}
+
+int main() {
+    int result;
+    int price;
+    ErrorCode err;
+
+    // 🧪 ร้านพิซซ่า
+    err = check_division(12, 0, &result);
+    if (err != ERROR_NONE) {
+        print_error(err);
+    }
+
+    // 🧪 ร้านขายของ
+    err = check_price("ABC", &price);
+    if (err != ERROR_NONE) {
+        print_error(err);
+    }
+
+    // 🧪 ธนาคาร
+    err = check_money(999999999999 + 1, -5);
+    if (err != ERROR_NONE) {
+        print_error(err);
+    }
+
+    return 0;
+}
