@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include "esp_log.h"
+
+void app_main(void)
+{
+    const char *TAG = "CANDY_PROJECT";
+
+    // 🍬 จำนวนถุงลูกอมและลูกอมต่อถุง
+    int candy_bags = 5;         // จำนวนถุง
+    int candies_per_bag = 6;    // ลูกอมต่อถุง
+    int total_candies = candy_bags * candies_per_bag;
+
+    // 🎯 แสดงผลลัพธ์หลัก
+    ESP_LOGI(TAG, "=== ลูกอมในถุง ===");
+    ESP_LOGI(TAG, "จำนวนถุง: %d ถุง", candy_bags);
+    ESP_LOGI(TAG, "ลูกอมต่อถุง: %d เม็ด", candies_per_bag);
+    ESP_LOGI(TAG, "ลูกอมทั้งหมด: %d × %d = %d เม็ด", 
+             candy_bags, candies_per_bag, total_candies);
+
+    // 🔁 การบวกซ้ำๆ แสดงแบบเข้าใจง่าย
+    ESP_LOGI(TAG, "การบวกซ้ำๆ:");
+    int sum = 0;
+    for (int i = 0; i < candy_bags; i++) {
+        sum += candies_per_bag;
+        ESP_LOGI(TAG, "  รอบที่ %d: รวม = %d", i + 1, sum);
+    }
+
+    // 🍓 แบบฝึกหัดที่ 2: ลูกอมหลายรส
+    int strawberry_bags = 3;
+    int orange_bags = 2;
+    int grape_bags = 4;
+
+    int total_bags = strawberry_bags + orange_bags + grape_bags;
+    total_candies = total_bags * candies_per_bag;
+
+    ESP_LOGI(TAG, "🍓 สตรอเบอร์รี่: %d ถุง = %d เม็ด", 
+             strawberry_bags, strawberry_bags * candies_per_bag);
+    ESP_LOGI(TAG, "🍊 รสส้ม: %d ถุง = %d เม็ด", 
+             orange_bags, orange_bags * candies_per_bag);
+    ESP_LOGI(TAG, "🍇 รสองุ่น: %d ถุง = %d เม็ด", 
+             grape_bags, grape_bags * candies_per_bag);
+    ESP_LOGI(TAG, "รวมลูกอมทั้งหมด (หลายรส): %d เม็ด", total_candies);
+
+    // 📊 แบบฝึกหัดที่ 3: ตารางสูตรคูณของจำนวนลูกอมต่อถุง
+    ESP_LOGI(TAG, "📊 ตารางสูตรคูณของ %d:", candies_per_bag);
+    for (int i = 1; i <= 10; i++) {
+        ESP_LOGI(TAG, "   %d x %d = %d", i, candies_per_bag, i * candies_per_bag);
+    }
+
+    // 👥 แบบฝึกหัดที่ 4: แจกลูกอมให้เพื่อน
+    int friends = 12;
+    int candies_per_friend = total_candies / friends;
+    int remaining_candies = total_candies % friends;
+
+    ESP_LOGI(TAG, "👥 แจกให้เพื่อน %d คน:", friends);
+    ESP_LOGI(TAG, "   คนละ %d เม็ด", candies_per_friend);
+    ESP_LOGI(TAG, "   เหลือ %d เม็ด", remaining_candies);
+}
